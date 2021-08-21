@@ -7,13 +7,16 @@ namespace PatchOperation
     {
         List<string> mods = null;
 
+		bool all = false;
+
 		Verse.PatchOperation match = null;
 
 		Verse.PatchOperation nomatch = null;
 
         protected override bool ApplyWorker(XmlDocument xml)
         {
-			if (Highlander.IsAnyActiveByID(mods))
+			
+			if (Highlander.IsActiveByID(mods, all))
 			{
 				if (match != null)
 				{
