@@ -7,6 +7,7 @@ namespace PatchOperation
     public class Set : Verse.PatchOperationPathed
     {
         XmlContainer value;
+        bool replaceExisting = true;
 
         protected override bool ApplyWorker(XmlDocument xml)
         {
@@ -24,7 +25,10 @@ namespace PatchOperation
                     var import = xmlNode.OwnerDocument.ImportNode(childNode, true);
                     if (conflict != null)
                     {
-                        xmlNode.ReplaceChild(import, conflict);
+                        if (replaceExisting)
+                        {
+                            xmlNode.ReplaceChild(import, conflict);
+                        }
                     }
                     else
                     {
