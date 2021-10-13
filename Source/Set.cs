@@ -6,7 +6,8 @@ namespace PatchOperation
 {
     public class Set : Verse.PatchOperationPathed
     {
-        XmlContainer value;
+        XmlContainer value = null;
+        Skip skip = Skip.None;
 
         protected override bool ApplyWorker(XmlDocument xml)
         {
@@ -24,15 +25,25 @@ namespace PatchOperation
                     var import = xmlNode.OwnerDocument.ImportNode(childNode, true);
                     if (conflict != null)
                     {
-                        xmlNode.ReplaceChild(import, conflict);
+                        if (skip != Skip.Replacing)
+                        {
+                            xmlNode.ReplaceChild(import, conflict);
+                        }
                     }
-                    else
+                    else if (skip != Skip.Adding)
                     {
                         xmlNode.AppendChild(import);
                     }
                 }
             }
             return result;
+        }
+
+        private enum Skip
+        {
+            None,
+            Adding,
+            Replacing,
         }
     }
 }
